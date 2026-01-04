@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections;
+using System.Linq;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerStats))]
@@ -25,12 +27,10 @@ public class PlayerController : MonoBehaviour
     public float dodgeCooldown = 0.5f;
 
     [Header("Defense Settings")]
-    public KeyCode blockKey = KeyCode.E;
     public float parryWindowDuration = 0.2f; 
     [Range(0f, 1f)] public float blockMovementMultiplier = 0.5f; 
 
     [Header("Combat Settings")]
-    public KeyCode toggleCombatKey = KeyCode.X;
     public float attackRange = 2.0f;
     public float comboResetTime = 1.0f;
     public float attackCooldown = 0.5f; 
@@ -44,6 +44,19 @@ public class PlayerController : MonoBehaviour
     public float staminaCostMultiplier = 1.0f; 
     public float stealthDetectionMultiplier = 1.0f; 
     public float damageMultiplier = 1.0f; 
+
+    // Input System
+    [Header("Input")]
+    public InputActionAsset inputActionsAsset;
+    private InputActionMap playerActionMap;
+    private InputAction moveAction;
+    private InputAction jumpAction;
+    private InputAction attackAction;
+    private InputAction blockAction;
+    private InputAction dodgeAction;
+    private InputAction toggleCombatAction;
+    private InputAction crouchAction;
+    private Vector2 moveInput;
 
     // References
     private CharacterController controller;
@@ -66,10 +79,85 @@ public class PlayerController : MonoBehaviour
     // Removed isRunningAttack flag
     private int comboCount = 0;
     private float lastAttackTime = 0;
-    private int jumpCount = 0;
+    // jumpCount reserved for future double jump feature
+    // private int jumpCount = 0;
     
     // Temp storage for the current swing's damage
     private float pendingDamage = 0f;
+
+    void Awake()
+    {
+        // Initialize Input System
+        if (inputActionsAsset == null)
+        {
+            Debug.LogError("InputSystem_Actions asset is not assigned! Please assign it in the Inspector.");
+            return;
+        }
+
+        playerActionMap = inputActionsAsset.FindActionMap("Player");
+        if (playerActionMap != null)
+        {
+            moveAction = playerActionMap.FindAction("Move");
+            jumpAction = playerActionMap.FindAction("Jump");
+            attackAction = playerActionMap.FindAction("Attack");
+            blockAction = playerActionMap.FindAction("Block");
+            dodgeAction = playerActionMap.FindAction("Dodge");
+            toggleCombatAction = playerActionMap.FindAction("ToggleCombat");
+            crouchAction = playerActionMap.FindAction("Crouch");
+        }
+        else
+        {
+            Debug.LogError("Player Action Map not found in InputSystem_Actions!");
+        }
+    }
+
+    void OnEnable()
+    {
+        if (playerActionMap != null)
+        {
+            playerActionMap.Enable();
+            
+            // Subscribe to input events
+            if (moveAction != null)
+            {
+                moveAction.performed += OnMove;
+                moveAction.canceled += OnMove;
+            }
+            if (jumpAction != null) jumpAction.performed += OnJump;
+            if (attackAction != null) attackAction.performed += OnAttack;
+            if (blockAction != null)
+            {
+                blockAction.performed += OnBlock;
+                blockAction.canceled += OnBlockCancel;
+            }
+            if (dodgeAction != null) dodgeAction.performed += OnDodge;
+            if (toggleCombatAction != null) toggleCombatAction.performed += OnToggleCombat;
+        }
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe from input events
+        if (moveAction != null)
+        {
+            moveAction.performed -= OnMove;
+            moveAction.canceled -= OnMove;
+        }
+        if (jumpAction != null) jumpAction.performed -= OnJump;
+        if (attackAction != null) attackAction.performed -= OnAttack;
+        if (blockAction != null)
+        {
+            blockAction.performed -= OnBlock;
+            blockAction.canceled -= OnBlockCancel;
+        }
+        if (dodgeAction != null) dodgeAction.performed -= OnDodge;
+        if (toggleCombatAction != null) toggleCombatAction.performed -= OnToggleCombat;
+        
+        if (playerActionMap != null)
+        {
+            playerActionMap.Disable();
+        }
+    }
 
     void Start()
     {
@@ -87,10 +175,71 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Input callbacks
+    void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+    }
+
+    void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.performed && controller.isGrounded && stats.HasStamina(jumpCost))
+        {
+            stats.UseStamina(jumpCost);
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            if (animator != null) animator.SetTrigger("Jump");
+        }
+    }
+
+    void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed && !isAttacking)
+        {
+            PerformComboAttack();
+        }
+    }
+
+    void OnBlock(InputAction.CallbackContext context)
+    {
+        if (context.performed && !isAttacking && !isDodging)
+        {
+            StartCoroutine(PerformParryWindow());
+        }
+        if (context.performed || (blockAction != null && blockAction.IsPressed()))
+        {
+            if (!isAttacking && !isDodging)
+            {
+                isBlocking = true;
+            }
+        }
+    }
+
+    void OnBlockCancel(InputAction.CallbackContext context)
+    {
+        isBlocking = false;
+        isParrying = false;
+    }
+
+    void OnDodge(InputAction.CallbackContext context)
+    {
+        if (context.performed && canDodge && !isAttacking)
+        {
+            if(stats.HasStamina(dodgeCost)) StartCoroutine(PerformDodge());
+        }
+    }
+
+    void OnToggleCombat(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isCombatMode = !isCombatMode;
+        }
+    }
+
     void Update()
     {
         bool isGrounded = controller.isGrounded;
-        if (isGrounded && velocity.y < 0) { velocity.y = -2f; jumpCount = 0; }
+        if (isGrounded && velocity.y < 0) { velocity.y = -2f; }
         if (isDodging) return; 
 
         velocity.y += gravity * Time.deltaTime;
@@ -109,7 +258,7 @@ public class PlayerController : MonoBehaviour
             // Always slow down when attacking to commit to the swing
             currentSpeed *= attackMovementMultiplier;
         }
-        else if (Input.GetKey(KeyCode.LeftControl)) 
+        else if (crouchAction != null && crouchAction.IsPressed()) 
         {
             currentSpeed *= 0.5f;
         }
@@ -142,11 +291,6 @@ public class PlayerController : MonoBehaviour
 
     void HandleCombatMode()
     {
-        if (Input.GetKeyDown(toggleCombatKey))
-        {
-            isCombatMode = !isCombatMode;
-        }
-
         if (Time.time - lastAttackTime > comboResetTime)
         {
             comboCount = 0;
@@ -155,15 +299,12 @@ public class PlayerController : MonoBehaviour
 
     void HandleDefenseInput()
     {
-        if (Input.GetKeyDown(blockKey) && !isAttacking && !isDodging)
-        {
-            StartCoroutine(PerformParryWindow());
-        }
-        if (Input.GetKey(blockKey) && !isAttacking && !isDodging)
+        // Block input is now handled by input callbacks
+        if (blockAction != null && blockAction.IsPressed() && !isAttacking && !isDodging)
         {
             isBlocking = true;
         }
-        else if (Input.GetKeyUp(blockKey))
+        else if (blockAction == null || !blockAction.IsPressed())
         {
             isBlocking = false;
             isParrying = false;
@@ -191,7 +332,8 @@ public class PlayerController : MonoBehaviour
 
     void RotateTowardsMouse()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
         Plane groundPlane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0));
         float rayDistance;
         if (groundPlane.Raycast(ray, out rayDistance))
@@ -207,9 +349,7 @@ public class PlayerController : MonoBehaviour
 
     Vector3 CalculateHorizontalMovement(float speed)
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        Vector3 direction = new Vector3(h, 0, v).normalized;
+        Vector3 direction = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
         if (direction.magnitude >= 0.1f)
         {
@@ -224,22 +364,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleActionInput(bool isGrounded)
     {
-        if (Input.GetButtonDown("Jump") && isGrounded && stats.HasStamina(jumpCost))
-        {
-            stats.UseStamina(jumpCost);
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            animator.SetTrigger("Jump");
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDodge && !isAttacking)
-        {
-            if(stats.HasStamina(dodgeCost)) StartCoroutine(PerformDodge());
-        }
-
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
-        {
-            PerformComboAttack(); 
-        }
+        // All input is now handled by Input System callbacks
     }
 
     void PerformComboAttack()
@@ -310,14 +435,12 @@ public class PlayerController : MonoBehaviour
         
         float startTime = Time.time;
         Vector3 dodgeDir = transform.forward;
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        if(Mathf.Abs(h) > 0 || Mathf.Abs(v) > 0)
+        if(moveInput.magnitude > 0.1f)
         {
              Vector3 camForward = cameraTransform.forward; 
              Vector3 camRight = cameraTransform.right;
              camForward.y = 0; camRight.y = 0;
-             dodgeDir = (camForward * v + camRight * h).normalized;
+             dodgeDir = (camForward * moveInput.y + camRight * moveInput.x).normalized;
              transform.rotation = Quaternion.LookRotation(dodgeDir);
         }
 
