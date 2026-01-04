@@ -1,0 +1,80 @@
+# Unity .gitignore
+# Recommended for Unity projects - excludes generated files, IDE settings, and OS files
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Visual Studio / Rider / VSCode
+.vs/
+.vscode/
+.idea/
+*.sln
+*.csproj
+*.unityproj
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity generated folders
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+MemoryCaptures/
+UserSettings/
+
+# Cache and export
+ExportedObj/
+*.unitypackage
+
+# Gradle / Android
+.gradle/
+local.properties
+*.keystore
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xcuserdatad
+
+# Generated plugin files
+*.jar
+*.aar
+
+# Backup and swap files
+*.swp
+*~
+*.bak
+*.orig
+
+# Logs
+*.log
+
+# Lock files
+project.lock.json
+
+# Optional: Uncomment if you use Rider
+# .rider/
+Assets/FantasyEnvironments/
+Assets/Advance Studios/
+Assets/Fantasy Skybox FREE/
+Assets/TerrainSampleAssets/
+FantasyEnvirontments/
+Fantasy Skybox FREE/
+Advance Studios/
+TerrainSampleAssets/
