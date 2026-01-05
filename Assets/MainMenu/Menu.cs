@@ -8,7 +8,7 @@ public class Menu : MonoBehaviour
     /// </summary>
     public void PlayGame()
     {
-        SceneManager.LoadScene("main");
+        SceneManager.LoadScene("opening");
     }
 
     /// <summary>
