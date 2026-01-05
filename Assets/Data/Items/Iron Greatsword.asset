@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52744ad16388d8d4ab0ada972e4e9ea4, type: 3}
+  m_Name: Iron Greatsword
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: New Item
+  icon: {fileID: 0}
+  isWeapon: 1
+  damage: 10
+  staminaCost: 15
+  modelPrefab: {fileID: 1845237839428460, guid: 87006c35c5a468142a7d7f6dc326266b, type: 3}
+  weaponAnimationID: 1
