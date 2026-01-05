@@ -1,0 +1,100 @@
+@Sub SRSurface = SRSurfaceNormalMap
+    Normal Map = nil
+    Scale & Bias = 1
+    Flip X = 0
+    Flip Y = 0
+    Flip Z = 0
+    Object Space = 0
+@End
+
+@Sub SRMicrosurface = SRMicrosurfaceGlossMap
+    Gloss Map = nil
+    Channel = 0
+    Gloss = 0.49
+    Invert = 0
+@End
+
+@Sub SRAlbedo = SRAlbedoMap
+    Albedo Map = @Tex file "../Textures/eyebrows_color_map.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/eyebrows_color_map.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Color = 1 1 1
+@End
+
+@Sub SRDiffusion = SRDiffusionScatter
+    Scatter Map = nil
+    Scatter Depth (mm) = 450.7
+    Scatter Color = 1 1 1
+    Translucency Map = nil
+    Translucency = 3
+    Translucency Color = 1 0.81331 0.63883
+    Translucency Depth (mm) = 4000
+    Translucency Scatter = 0.772
+    Fuzz Map = nil
+    Fuzz = 0.034
+    Fuzz Color = 1 0.881881 0.847443
+    Mask Fuzz with Gloss = 1
+@End
+
+@Sub SRReflectivity = SRReflectivitySpecularMap
+    Specular Map = nil
+    Channel;specular = 4
+    Intensity = 0.011
+    Color = 1 1 1
+    Fresnel = 0.179479
+    Fresnel Color = 0.590619 0.278894 0.107023
+    Conserve Energy = 1
+@End
+
+@Sub SRReflection = SRReflectionAnisotropic
+    Horizon Occlusion = 1
+    Direction Map = nil
+    Scale & Bias = 1
+    Swap X/Y Direction = 0
+    Anisotropy = 0.965
+    Anisotropy Direction = 0
+@End
+
+@Sub SRReflection2 = SRReflectionAnisotropic
+    Horizon Occlusion = 1
+    Secondary Gloss = 0.7
+    Secondary Intensity = 4
+    Secondary Intensity Color = 0.324967 0.259545 0.208811
+    Secondary Fresnel = 0
+    Secondary Fresnel Color = 1 1 1
+    Direction Map = nil
+    Scale & Bias = 1
+    Swap X/Y Direction = 0
+    Anisotropy = 0.975
+    Anisotropy Direction = 0
+    Refraction Shift = 0.237
+@End
+
+@Sub SROcclusion = SROcclusionMap
+    Occlusion Map = nil
+    Channel;occlusion = 3
+    Occlusion = 2
+    UV Set = 0
+    Vertex Channel = 0
+    Cavity Map = @Tex file "../Textures/eyebrows_color_map.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/eyebrows_color_map.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;cavity = 2
+    Diffuse Cavity = 0.059
+    Specular Cavity = 0.455
+@End
+
+@Sub SRTransparency = SRTransparencyDither
+    Use Albedo Alpha = 0
+    Alpha Map = @Tex file "../Textures/eyebrows_color_map.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/eyebrows_color_map.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel = 3
+    Alpha = 1
+@End
+
+@Sub SRMerge = SRMerge
+    Texture Tiling = 1
+    Tile U = 1
+    Offset U = 0
+    Tile V = 1
+    Offset V = 0
+    Wrap = 1
+    Aniso = 2
+    Filter = 1
+@End
+

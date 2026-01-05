@@ -1,0 +1,79 @@
+@Sub SRSurface = SRSurfaceNormalMap
+    Normal Map = nil
+    Scale & Bias = 1
+    Flip X = 0
+    Flip Y = 0
+    Flip Z = 0
+    Object Space = 0
+@End
+
+@Sub SRMicrosurface = SRMicrosurfaceGlossMap
+    Gloss Map = nil
+    Channel = 0
+    Gloss = 1
+    Invert = 0
+@End
+
+@Sub SRAlbedo = SRAlbedoMap
+    Albedo Map = nil
+    Color = 1 1 1
+@End
+
+@Sub SRDiffusion = SRDiffusionLambertian
+@End
+
+@Sub SRReflectivity = SRReflectivitySpecularMap
+    Specular Map = nil
+    Channel;specular = 4
+    Intensity = 1
+    Color = 0.9 0.9 0.9
+    Fresnel = 1
+    Fresnel Color = 1 1 1
+    Conserve Energy = 0
+@End
+
+@Sub SRReflection = SRReflectionGGX
+    Horizon Occlusion = 1
+@End
+
+@Sub SRReflection2 = SRReflectionGGX
+    Horizon Occlusion = 1
+    Secondary Gloss = 4
+    Secondary Intensity = 0.614799
+    Secondary Intensity Color = 1 1 1
+    Secondary Fresnel = 1
+    Secondary Fresnel Color = 1 1 1
+@End
+
+@Sub SROcclusion = SROcclusionMap
+    Occlusion Map = nil
+    Channel;occlusion = 0
+    Occlusion = 1
+    UV Set = 0
+    Vertex Channel = 0
+    Cavity Map = @Tex file "../Textures/eye_color_Fade.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/eye_color_Fade.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;cavity = 0
+    Diffuse Cavity = 0
+    Specular Cavity = 0.5
+@End
+
+@Sub SRTransparency = SRTransparencyAdd
+    Use Albedo Alpha = 1
+    Alpha Map = @Tex file "../Textures/EyeOverlay_BC.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/EyeOverlay_BC.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel = 0
+    Alpha = 1
+    Tint = 0.625232 0.625232 0.625232
+    Include Diffuse = 0
+@End
+
+@Sub SRMerge = SRMerge
+    Texture Tiling = 1
+    Tile U = 1
+    Offset U = 0
+    Tile V = 1
+    Offset V = 0
+    Wrap = 1
+    Aniso = 2
+    Filter = 1
+@End
+

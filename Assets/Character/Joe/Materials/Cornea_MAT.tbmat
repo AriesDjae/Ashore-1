@@ -1,0 +1,94 @@
+@Sub SRSubdivision = SRSubdivisionPN
+    Tessellation = 128
+    Smoothing = 1
+@End
+
+@Sub SRSurface = SRSurfaceParallaxMap
+    Normal Map = @Tex file "../Textures/EyeCorneaNRM.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/EyeCorneaNRM.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Scale & Bias = 1
+    Flip X = 0
+    Flip Y = 1
+    Flip Z = 0
+    Object Space = 0
+    Height Map = nil
+    Channel = 0
+    Depth = 0
+    Depth Center = 0.5
+@End
+
+@Sub SRMicrosurface = SRMicrosurfaceGlossMap
+    Gloss Map = nil
+    Channel = 3
+    Gloss = 0.95
+    Invert = 0
+@End
+
+@Sub SRAlbedo = SRAlbedoMap
+    Albedo Map = nil
+    Color = 0.831396 0.831396 0.831396
+@End
+
+@Sub SRDiffusion = SRDiffusionMicrofiber
+    Fuzz Map = nil
+    Fuzz = 0.5
+    Fuzz Color = 1 1 1
+    Fuzz Scatter = 0.5
+    Fuzz Occlusion = 0.5
+    Mask Fuzz with Gloss = 1
+@End
+
+@Sub SRReflectivity = SRReflectivitySpecularMap
+    Specular Map = nil
+    Channel;specular = 4
+    Intensity = 0.0596914
+    Color = 1 1 1
+    Fresnel = 0.38411
+    Fresnel Color = 1 1 1
+    Conserve Energy = 1
+@End
+
+@Sub SRReflection = SRReflectionGGX
+    Horizon Occlusion = 1
+@End
+
+@Sub SRReflection2 = SRReflectionGGX
+    Horizon Occlusion = 1
+    Secondary Gloss = 0.41608
+    Secondary Intensity = 1.79804
+    Secondary Intensity Color = 1 1 1
+    Secondary Fresnel = 0.0511364
+    Secondary Fresnel Color = 1 1 1
+@End
+
+@Sub SROcclusion = SROcclusionMap
+    Occlusion Map = nil
+    Channel;occlusion = 0
+    Occlusion = 1
+    UV Set = 0
+    Vertex Channel = 0
+    Cavity Map = nil
+    Channel;cavity = 1
+    Diffuse Cavity = 0
+    Specular Cavity = 0.881
+@End
+
+@Sub SRTransparency = SRTransparencyAdd
+    Use Albedo Alpha = 0
+    Alpha Map = @Tex file "../Textures/eye_color_Fade.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/eye_color_Fade.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel = 0
+    Alpha = 1
+    Tint = 1 1 1
+    Include Diffuse = 0
+@End
+
+@Sub SRMerge = SRMerge
+    Texture Tiling = 1
+    Tile U = 1
+    Offset U = 0
+    Tile V = 1
+    Offset V = 0
+    Wrap = 1
+    Aniso = 2
+    Filter = 1
+@End
+

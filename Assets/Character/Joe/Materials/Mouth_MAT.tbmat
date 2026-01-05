@@ -1,0 +1,84 @@
+@Sub SRSurface = SRSurfaceNormalMap
+    Normal Map = @Tex file "../Textures/teeth_normal_map.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/teeth_normal_map.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Scale & Bias = 1
+    Flip X = 0
+    Flip Y = 1
+    Flip Z = 0
+    Object Space = 0
+@End
+
+@Sub SRMicrosurface = SRMicrosurfaceRoughnessMap
+    Roughness Map = @Tex file "../Textures/Teeth_SAMR.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Teeth_SAMR.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel = 3
+    Roughness = 1
+    Invert;roughness = 0
+@End
+
+@Sub SRAlbedo = SRAlbedoMap
+    Albedo Map = @Tex file "../Textures/T_MP_Teeth_D.png" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/T_MP_Teeth_D.png" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Color = 1 1 1
+@End
+
+@Sub SRDiffusion = SRDiffusionScatter
+    Scatter Map = nil
+    Scatter Depth (mm) = 59.7072
+    Scatter Color = 0.973548 0.858308 0.526882
+    Translucency Map = @Tex file "../Textures/Teeth_SSS.png" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Teeth_SSS.png" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Translucency = 5
+    Translucency Color = 1 0.917649 0.694942
+    Translucency Depth (mm) = 1000
+    Translucency Scatter = 1
+    Fuzz Map = nil
+    Fuzz = 0
+    Fuzz Color = 1 1 1
+    Mask Fuzz with Gloss = 0
+@End
+
+@Sub SRReflectivity = SRReflectivityMetalnessAdvanced
+    Metalness Map = @Tex file "../Textures/Teeth_SAMR.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Teeth_SAMR.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel = 2
+    Metalness = 1
+    Invert = 0
+    Specular Level Map = nil
+    Channel;advMtlMask = 2
+    Specular = 0.040396
+    Invert = 0
+    Specular Curve = 0
+@End
+
+@Sub SRReflection = SRReflectionGGX
+    Horizon Occlusion = 1
+@End
+
+@Sub SRReflection2 = SRReflectionGGX
+    Horizon Occlusion = 1
+    Secondary Gloss = 0.5
+    Secondary Intensity = 1
+    Secondary Intensity Color = 1 1 1
+    Secondary Fresnel = 1
+    Secondary Fresnel Color = 1 1 1
+@End
+
+@Sub SROcclusion = SROcclusionMap
+    Occlusion Map = @Tex file "../Textures/Teeth_SAMR.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Teeth_SAMR.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;occlusion = 1
+    Occlusion = 1
+    UV Set = 0
+    Vertex Channel = 0
+    Cavity Map = @Tex file "../Textures/Teeth_FSC.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Teeth_FSC.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;cavity = 2
+    Diffuse Cavity = 1
+    Specular Cavity = 1
+@End
+
+@Sub SRMerge = SRMerge
+    Texture Tiling = 1
+    Tile U = 1
+    Offset U = 0
+    Tile V = 1
+    Offset V = 0
+    Wrap = 1
+    Aniso = 2
+    Filter = 1
+@End
+

@@ -1,0 +1,98 @@
+@Sub SRSurface = SRSurfaceDetailNormalMap
+    Normal Map = @Tex file "../Textures/Head_BN.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_BN.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Scale & Bias = 1
+    Flip X = 0
+    Flip Y = 1
+    Flip Z = 0
+    Object Space = 0
+    Detail Normal Map = @Tex file "../Textures/face_skin_pore_06_nm.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/face_skin_pore_06_nm.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    UV Set = 0
+    Scale & Bias;detail = 1
+    Flip X;detail = 0
+    Flip Y;detail = 1
+    Flip Z;detail = 0
+    Detail Tiling = 25
+    Detail Offset = 0
+    Detail Weight Map = @Tex file "../Textures/Head_DT.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_DT.tga" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;detail = 0
+    Detail Weight = 1
+@End
+
+@Sub SRMicrosurface = SRMicrosurfaceAdvancedMap
+    Microsurface Map = @Tex file "../Textures/Head_SAMR.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_SAMR.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel = 3
+    Mode = 1
+    Maximum = 1
+    Minimum = 0
+    Exponent = 0.5
+    Horizon Smoothing = 0
+@End
+
+@Sub SRAlbedo = SRAlbedoMap
+    Albedo Map = @Tex file "../Textures/Head_BC.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_BC.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Color = 1 1 1
+@End
+
+@Sub SRDiffusion = SRDiffusionScatter
+    Scatter Map = @Tex file "../Textures/Head_SSS.png" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_SSS.png" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Scatter Depth (mm) = 81.36
+    Scatter Color = 0.938686 0.434154 0.234551
+    Translucency Map = nil
+    Translucency = 0.386364
+    Translucency Color = 1 0.0143499 0.0143499
+    Translucency Depth (mm) = 2500
+    Translucency Scatter = 0
+    Fuzz Map = @Tex file "../Textures/Head_F.png" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_F.png" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Fuzz = 1
+    Fuzz Color = 1 1 1
+    Mask Fuzz with Gloss = 0
+@End
+
+@Sub SRReflectivity = SRReflectivityMetalnessAdvanced
+    Metalness Map = @Tex file "../Textures/Head_SAMR.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_SAMR.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel = 2
+    Metalness = 1
+    Invert = 0
+    Specular Level Map = @Tex file "../Textures/Head_SAMR.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_SAMR.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;advMtlMask = 0
+    Specular = 0.08
+    Invert = 0
+    Specular Curve = 0
+@End
+
+@Sub SRReflection = SRReflectionGGX
+    Horizon Occlusion = 3.96049
+@End
+
+@Sub SRReflection2 = SRReflectionGGX
+    Horizon Occlusion = 1.3882
+    Secondary Gloss = 0.390351
+    Secondary Intensity = 1.11686
+    Secondary Intensity Color = 1 1 1
+    Secondary Fresnel = 0.517045
+    Secondary Fresnel Color = 1 1 1
+@End
+
+@Sub SROcclusion = SROcclusionMap
+    Occlusion Map = @Tex file "../Textures/Head_SAMR.tga" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_SAMR.tga" srgb 1 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;occlusion = 1
+    Occlusion = 1
+    UV Set = 0
+    Vertex Channel = 0
+    Cavity Map = @Tex file "../Textures/Head_Cavity.png" fileFull "G:/!Projects/Marmoset/bundles/MOM_Joe/Assets/Textures/Head_Cavity.png" srgb 0 filter 1 mip 1 aniso 4 wrap 1 visible 1 @EndTex
+    Channel;cavity = 0
+    Diffuse Cavity = 0.3
+    Specular Cavity = 1
+@End
+
+@Sub SRMerge = SRMerge
+    Texture Tiling = 1
+    Tile U = 1
+    Offset U = 0
+    Tile V = 1
+    Offset V = 0
+    Wrap = 1
+    Aniso = 2
+    Filter = 1
+@End
+
