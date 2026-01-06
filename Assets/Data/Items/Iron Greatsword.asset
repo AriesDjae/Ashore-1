@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: New Item
   icon: {fileID: 0}
   isWeapon: 1
-  damage: 10
+  damage: 20
   staminaCost: 15
   modelPrefab: {fileID: 1845237839428460, guid: 87006c35c5a468142a7d7f6dc326266b, type: 3}
   weaponAnimationID: 1

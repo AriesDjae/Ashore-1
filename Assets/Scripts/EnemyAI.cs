@@ -5,13 +5,13 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     [Header("Settings")]
-    public float lookRadius = 15f;
-    public float attackRadius = 2f;
+    public float lookRadius = 15f;  // How far it can see
+    public float attackRadius = 2f; // How close to bite
     public float attackDamage = 10f;
     public float attackCooldown = 1.5f;
 
     [Header("Animation")]
-    public Animator animator; // DRAG YOUR CHILD MODEL HERE IN INSPECTOR
+    public Animator animator; // Assign the child model with Animator here
 
     Transform target;
     NavMeshAgent agent;
@@ -22,6 +22,7 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         if(animator == null) animator = GetComponentInChildren<Animator>();
         
+        // Find Player automatically by Tag
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null) target = player.transform;
     }
@@ -39,14 +40,18 @@ public class EnemyAI : MonoBehaviour
 
         float distance = Vector3.Distance(target.position, transform.position);
 
+        // 2. Chase
         if (distance <= lookRadius)
         {
             agent.SetDestination(target.position);
 
+            // 3. Attack
             if (distance <= attackRadius)
             {
+                // Face the target
                 FaceTarget();
                 
+                // Attack logic
                 if (Time.time - lastAttackTime > attackCooldown)
                 {
                     Attack();
@@ -63,7 +68,7 @@ public class EnemyAI : MonoBehaviour
         // Trigger Animation
         if(animator != null) animator.SetTrigger("Attack");
         
-        // Deal Damage (Simple distance check hit)
+        // Deal Damage
         PlayerStats pStats = target.GetComponent<PlayerStats>();
         if (pStats != null)
         {
