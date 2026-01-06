@@ -5,53 +5,51 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     [Header("Settings")]
-    public float lookRadius = 15f;  // How far it can see
-    public float attackRadius = 2f; // How close to bite
+    public float lookRadius = 15f;
+    public float attackRadius = 2f;
     public float attackDamage = 10f;
     public float attackCooldown = 1.5f;
 
     [Header("Animation")]
-    public Animator animator; // Assign the child model with Animator here
+    public Animator animator; 
 
     Transform target;
     NavMeshAgent agent;
     float lastAttackTime;
+    
+    // NEW: Stun State
+    private bool isStunned = false;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         if(animator == null) animator = GetComponentInChildren<Animator>();
         
-        // Find Player automatically by Tag
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null) target = player.transform;
     }
 
     void Update()
     {
-        // 1. Update Animation Speed
+        // STOP if stunned or dead (handled by disabling script, but safety check here)
+        if (isStunned || target == null) return;
+
+        // Sync Animation Speed
         if(animator != null)
         {
-            // agent.velocity.magnitude is the current speed
             animator.SetFloat("Speed", agent.velocity.magnitude);
         }
 
-        if (target == null) return;
-
         float distance = Vector3.Distance(target.position, transform.position);
 
-        // 2. Chase
         if (distance <= lookRadius)
         {
             agent.SetDestination(target.position);
 
-            // 3. Attack
             if (distance <= attackRadius)
             {
-                // Face the target
                 FaceTarget();
                 
-                // Attack logic
                 if (Time.time - lastAttackTime > attackCooldown)
                 {
                     Attack();
@@ -63,17 +61,37 @@ public class EnemyAI : MonoBehaviour
 
     void Attack()
     {
-        Debug.Log(name + " Attacks Player!");
-        
-        // Trigger Animation
         if(animator != null) animator.SetTrigger("Attack");
         
-        // Deal Damage
         PlayerStats pStats = target.GetComponent<PlayerStats>();
         if (pStats != null)
         {
             pStats.TakeDamage(attackDamage);
         }
+    }
+
+    // --- NEW STUN LOGIC ---
+    public void Stun(float duration)
+    {
+        if (isStunned) return; // Already stunned
+        StartCoroutine(StunRoutine(duration));
+    }
+
+    System.Collections.IEnumerator StunRoutine(float duration)
+    {
+        isStunned = true;
+        
+        // Stop moving
+        if(agent.isOnNavMesh) agent.isStopped = true;
+        
+        // Play Hit Animation
+        if(animator != null) animator.SetTrigger("GetHit");
+
+        yield return new WaitForSeconds(duration);
+
+        // Resume
+        isStunned = false;
+        if(agent.isOnNavMesh) agent.isStopped = false;
     }
 
     void FaceTarget()

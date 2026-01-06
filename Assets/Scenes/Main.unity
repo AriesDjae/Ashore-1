@@ -1513,6 +1513,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 304308904}
+    - target: {fileID: 3557438989710148329, guid: 1c0779651f65e3844bdd978287857306, type: 3}
+      propertyPath: enemyLayer.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 3720273445526474529, guid: 1c0779651f65e3844bdd978287857306, type: 3}
       propertyPath: m_Layer
       value: 6
